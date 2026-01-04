@@ -10,8 +10,6 @@
         <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
         <link rel="stylesheet" href="css/qgis2web.css">
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
-        <link rel="stylesheet" href="css/filter.css">
-<link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
@@ -39,9 +37,6 @@
         <script src="js/labels.js"></script>
         <script src="js/leaflet.photon.js"></script>
         <script src="js/leaflet-measure.js"></script>
-        <script src="js/tailDT.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/wNumb.js"></script>
         <script src="data/Wegen_2.js"></script>
         <script src="data/Wegbreedte_3.js"></script>
         <script src="data/Ontwerp_4.js"></script>
@@ -64,7 +59,7 @@
         }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[52.16416445466661,5.446618433857959],[52.17819577127964,5.47953716607079]]);
+        }).fitBounds([[52.164216905653774,5.448982323294759],[52.17824467894776,5.476520414200172]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -145,23 +140,10 @@
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
-        map.createPane('pane_CartoDbPositron_0');
-        map.getPane('pane_CartoDbPositron_0').style.zIndex = 400;
-        var layer_CartoDbPositron_0 = L.tileLayer('http://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-            pane: 'pane_CartoDbPositron_0',
-            opacity: 1.0,
-            attribution: '',
-            minZoom: 1,
-            maxZoom: 28,
-            minNativeZoom: 0,
-            maxNativeZoom: 20
-        });
-        layer_CartoDbPositron_0;
-        map.addLayer(layer_CartoDbPositron_0);
-        map.createPane('pane_GoogleSatellite_1');
-        map.getPane('pane_GoogleSatellite_1').style.zIndex = 401;
-        var layer_GoogleSatellite_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-            pane: 'pane_GoogleSatellite_1',
+        map.createPane('pane_GoogleSatellietbeeld_0');
+        map.getPane('pane_GoogleSatellietbeeld_0').style.zIndex = 400;
+        var layer_GoogleSatellietbeeld_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleSatellietbeeld_0',
             opacity: 1.0,
             attribution: '',
             minZoom: 1,
@@ -169,8 +151,21 @@
             minNativeZoom: 0,
             maxNativeZoom: 19
         });
-        layer_GoogleSatellite_1;
-        map.addLayer(layer_GoogleSatellite_1);
+        layer_GoogleSatellietbeeld_0;
+        map.addLayer(layer_GoogleSatellietbeeld_0);
+        map.createPane('pane_BasemapCartoDbPositron_1');
+        map.getPane('pane_BasemapCartoDbPositron_1').style.zIndex = 401;
+        var layer_BasemapCartoDbPositron_1 = L.tileLayer('http://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            pane: 'pane_BasemapCartoDbPositron_1',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_BasemapCartoDbPositron_1;
+        map.addLayer(layer_BasemapCartoDbPositron_1);
         function pop_Wegen_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
@@ -672,16 +667,12 @@
         function style_Animatie_5_0() {
             return {
                 pane: 'pane_Animatie_5',
-                radius: 8.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(232,113,141,1.0)',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/Animatie_5.svg',
+            iconSize: [22.04, 22.04]
+        }),
                 interactive: true,
             }
         }
@@ -700,7 +691,7 @@
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Animatie_5_0(feature));
+                return L.marker(latlng, style_Animatie_5_0(feature));
             },
         });
         bounds_group.addLayer(layer_Animatie_5);
@@ -710,8 +701,8 @@
             {label: 'Ontwerp<br /><table><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_Aanlegfietspad0.png" /></td><td>Aanleg fietspad</td></tr><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_Fietsstraatinasfalt1.png" /></td><td>Fietsstraat in asfalt</td></tr><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_Fietsstraatinklinkers2.png" /></td><td>Fietsstraat in klinkers</td></tr><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_Instellenschoolzone3.png" /></td><td>Instellen schoolzone</td></tr><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_Trottoirverwijderen4.png" /></td><td>Trottoir verwijderen</td></tr><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_Verwijderenparkeerstrook5.png" /></td><td>Verwijderen parkeerstrook</td></tr><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_Vervangenverharding6.png" /></td><td>Vervangen verharding</td></tr><tr><td style="text-align: center;"><img src="legend/Ontwerp_4_GeenmaatregelOutofScope7.png" /></td><td>Geen maatregel / Out of Scope</td></tr></table>', layer: layer_Ontwerp_4},
             {label: 'Wegbreedte<br /><table><tr><td style="text-align: center;"><img src="legend/Wegbreedte_3_Nietgeclassificeerd0.png" /></td><td>Niet geclassificeerd</td></tr><tr><td style="text-align: center;"><img src="legend/Wegbreedte_3_45meter1.png" /></td><td>< 4,5 meter</td></tr><tr><td style="text-align: center;"><img src="legend/Wegbreedte_3_4555meter2.png" /></td><td>4,5 - 5,5 meter</td></tr><tr><td style="text-align: center;"><img src="legend/Wegbreedte_3_55meter3.png" /></td><td>> 5,5 meter</td></tr></table>', layer: layer_Wegbreedte_3},
             {label: 'Wegen<br /><table><tr><td style="text-align: center;"><img src="legend/Wegen_2_Fietspad0.png" /></td><td>Fietspad</td></tr><tr><td style="text-align: center;"><img src="legend/Wegen_2_Parkeerstrook1.png" /></td><td>Parkeerstrook</td></tr><tr><td style="text-align: center;"><img src="legend/Wegen_2_Parkeerterrein2.png" /></td><td>Parkeerterrein</td></tr><tr><td style="text-align: center;"><img src="legend/Wegen_2_Parkeervak3.png" /></td><td>Parkeervak</td></tr><tr><td style="text-align: center;"><img src="legend/Wegen_2_Rijbaan4.png" /></td><td>Rijbaan</td></tr><tr><td style="text-align: center;"><img src="legend/Wegen_2_Verkeersdrempel5.png" /></td><td>Verkeersdrempel</td></tr><tr><td style="text-align: center;"><img src="legend/Wegen_2_Voetgangersgebied6.png" /></td><td>Voetgangersgebied</td></tr><tr><td style="text-align: center;"><img src="legend/Wegen_2_Voetpad7.png" /></td><td>Voetpad</td></tr></table>', layer: layer_Wegen_2},
-            {label: "Google Satellite", layer: layer_GoogleSatellite_1, radioGroup: 'bm' },
-            {label: "CartoDb Positron", layer: layer_CartoDbPositron_0, radioGroup: 'bm' },]
+            {label: "Basemap - CartoDb Positron", layer: layer_BasemapCartoDbPositron_1, radioGroup: 'bm' },
+            {label: "Google Satellietbeeld", layer: layer_GoogleSatellietbeeld_0, radioGroup: 'bm' },]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
             //selectorBack: false,
@@ -723,152 +714,6 @@
         });
         lay.addTo(map);
         setBounds();
-        var mapDiv = document.getElementById('map');
-        var row = document.createElement('div');
-        row.className="row";
-        row.id="all";
-        row.style.height = "100%";
-        var col1 = document.createElement('div');
-        col1.className="col9";
-        col1.id = "mapWindow";
-        col1.style.height = "99%";
-        col1.style.width = "80%";
-        col1.style.display = "inline-block";
-        var col2 = document.createElement('div');
-        col2.className="col3";
-        col2.id = "menu";
-        col2.style.display = "inline-block";
-        mapDiv.parentNode.insertBefore(row, mapDiv);
-        document.getElementById("all").appendChild(col1);
-        document.getElementById("all").appendChild(col2);
-        col1.appendChild(mapDiv)
-        var Filters = {"maatregel": "str"};
-        function filterFunc() {
-          map.eachLayer(function(lyr){
-          if ("options" in lyr && "dataVar" in lyr["options"]){
-            features = this[lyr["options"]["dataVar"]].features.slice(0);
-            try{
-              for (key in Filters){
-                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
-                if (Filters[key] == "str" || Filters[key] == "bool"){
-                  var selection = [];
-                  var options = document.getElementById("sel_" + keyS).options
-                  for (var i=0; i < options.length; i++) {
-                    if (options[i].selected) selection.push(options[i].value);
-                  }
-                    try{
-                      if (key in features[0].properties){
-                        for (i = features.length - 1;
-                          i >= 0; --i){
-                          if (selection.indexOf(
-                          features[i].properties[key])<0
-                          && selection.length>0) {
-                          features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                  }
-                }
-                if (Filters[key] == "int"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (parseInt(features[i].properties[key])
-                          < sliderVals[0]
-                          || parseInt(features[i].properties[key])
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "real"){
-                  sliderVals =  document.getElementById(
-                    "div_" + keyS).noUiSlider.get();
-                  try{
-                    if (key in features[0].properties){
-                    for (i = features.length - 1; i >= 0; --i){
-                      if (features[i].properties[key]
-                          < sliderVals[0]
-                          || features[i].properties[key]
-                          > sliderVals[1]){
-                            features.splice(i,1);
-                          }
-                        }
-                      }
-                    } catch(err){
-                    }
-                  }
-                if (Filters[key] == "date"
-                  || Filters[key] == "datetime"
-                  || Filters[key] == "time"){
-                  try{
-                    if (key in features[0].properties){
-                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
-                      startdate = document.getElementById("dat_" +
-                        HTMLkey + "_date1").value.replace(" ", "T");
-                      enddate = document.getElementById("dat_" +
-                        HTMLkey + "_date2").value.replace(" ", "T");
-                      for (i = features.length - 1; i >= 0; --i){
-                        if (features[i].properties[key] < startdate
-                          || features[i].properties[key] > enddate){
-                          features.splice(i,1);
-                        }
-                      }
-                    }
-                  } catch(err){
-                  }
-                }
-              }
-            } catch(err){
-            }
-          this[lyr["options"]["layerName"]].clearLayers();
-          this[lyr["options"]["layerName"]].addData(features);
-          }
-          })
-        }
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_maatregel = document.createElement('div');
-            div_maatregel.id = "div_maatregel";
-            div_maatregel.className= "filterselect";
-            document.getElementById("menu").appendChild(div_maatregel);
-            sel_maatregel = document.createElement('select');
-            sel_maatregel.multiple = true;
-            sel_maatregel.size = 8;
-            sel_maatregel.id = "sel_maatregel";
-            var maatregel_options_str = "<option value='' unselected></option>";
-            sel_maatregel.onchange = function(){filterFunc()};
-            maatregel_options_str  += '<option value="NULL">NULL</option>';
-            maatregel_options_str  += '<option value="Aanleg fietspad">Aanleg fietspad</option>';
-            maatregel_options_str  += '<option value="Fietsstraat in asfalt">Fietsstraat in asfalt</option>';
-            maatregel_options_str  += '<option value="Fietsstraat in klinkers">Fietsstraat in klinkers</option>';
-            maatregel_options_str  += '<option value="Instellen schoolzone">Instellen schoolzone</option>';
-            maatregel_options_str  += '<option value="Trottoir verwijderen">Trottoir verwijderen</option>';
-            maatregel_options_str  += '<option value="Vervangen verharding">Vervangen verharding</option>';
-            maatregel_options_str  += '<option value="Verwijderen parkeerstrook">Verwijderen parkeerstrook</option>';
-            sel_maatregel.innerHTML = maatregel_options_str;
-            div_maatregel.appendChild(sel_maatregel);
-            var lab_maatregel = document.createElement('div');
-            lab_maatregel.innerHTML = 'maatregel';
-            lab_maatregel.className = 'filterlabel';
-            div_maatregel.appendChild(lab_maatregel);
-            var reset_maatregel = document.createElement('div');
-            reset_maatregel.innerHTML = 'clear filter';
-            reset_maatregel.className = 'filterlabel';
-            reset_maatregel.onclick = function() {
-                var options = document.getElementById("sel_maatregel").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_maatregel.appendChild(reset_maatregel);
         </script>        
     </body>
 </html>
