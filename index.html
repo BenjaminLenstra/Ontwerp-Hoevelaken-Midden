@@ -65,7 +65,7 @@
         }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[52.165054299940955,5.438998576602144],[52.17909145386746,5.482348586710656]]);
+        }).fitBounds([[52.16774334106727,5.454216362499663],[52.17125253618115,5.465053157844199]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -1020,7 +1020,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"maatregel": "str","onderverdeling": "str"};
+        var Filters = {"gebruiksfunctie": "str","maatregel": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -1112,6 +1112,47 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_gebruiksfunctie = document.createElement('div');
+            div_gebruiksfunctie.id = "div_gebruiksfunctie";
+            div_gebruiksfunctie.className= "filterselect";
+            document.getElementById("menu").appendChild(div_gebruiksfunctie);
+            sel_gebruiksfunctie = document.createElement('select');
+            sel_gebruiksfunctie.multiple = true;
+            sel_gebruiksfunctie.size = 10;
+            sel_gebruiksfunctie.id = "sel_gebruiksfunctie";
+            var gebruiksfunctie_options_str = "<option value='' unselected></option>";
+            sel_gebruiksfunctie.onchange = function(){filterFunc()};
+            gebruiksfunctie_options_str  += '<option value="NULL">NULL</option>';
+            gebruiksfunctie_options_str  += '<option value="Beek">Beek</option>';
+            gebruiksfunctie_options_str  += '<option value="Berm">Berm</option>';
+            gebruiksfunctie_options_str  += '<option value="Hondenuitlaatplaats">Hondenuitlaatplaats</option>';
+            gebruiksfunctie_options_str  += '<option value="Natuurvriendelijke oever">Natuurvriendelijke oever</option>';
+            gebruiksfunctie_options_str  += '<option value="Schoolplein">Schoolplein</option>';
+            gebruiksfunctie_options_str  += '<option value="Sloot">Sloot</option>';
+            gebruiksfunctie_options_str  += '<option value="Speelplaats">Speelplaats</option>';
+            gebruiksfunctie_options_str  += '<option value="Sporthal Ridderspoor">Sporthal Ridderspoor</option>';
+            gebruiksfunctie_options_str  += '<option value="Trapveld">Trapveld</option>';
+            gebruiksfunctie_options_str  += '<option value="Vijver">Vijver</option>';
+            gebruiksfunctie_options_str  += '<option value="Vrije Speelruimte">Vrije Speelruimte</option>';
+            sel_gebruiksfunctie.innerHTML = gebruiksfunctie_options_str;
+            div_gebruiksfunctie.appendChild(sel_gebruiksfunctie);
+            var lab_gebruiksfunctie = document.createElement('div');
+            lab_gebruiksfunctie.innerHTML = 'gebruiksfunctie';
+            lab_gebruiksfunctie.className = 'filterlabel';
+            div_gebruiksfunctie.appendChild(lab_gebruiksfunctie);
+            var reset_gebruiksfunctie = document.createElement('div');
+            reset_gebruiksfunctie.innerHTML = 'clear filter';
+            reset_gebruiksfunctie.className = 'filterlabel';
+            reset_gebruiksfunctie.onclick = function() {
+                var options = document.getElementById("sel_gebruiksfunctie").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_gebruiksfunctie.appendChild(reset_gebruiksfunctie);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_maatregel = document.createElement('div');
             div_maatregel.id = "div_maatregel";
             div_maatregel.className= "filterselect";
@@ -1147,52 +1188,6 @@
                 filterFunc();
             };
             div_maatregel.appendChild(reset_maatregel);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
-            var div_onderverdeling = document.createElement('div');
-            div_onderverdeling.id = "div_onderverdeling";
-            div_onderverdeling.className= "filterselect";
-            document.getElementById("menu").appendChild(div_onderverdeling);
-            sel_onderverdeling = document.createElement('select');
-            sel_onderverdeling.multiple = true;
-            sel_onderverdeling.size = 10;
-            sel_onderverdeling.id = "sel_onderverdeling";
-            var onderverdeling_options_str = "<option value='' unselected></option>";
-            sel_onderverdeling.onchange = function(){filterFunc()};
-            onderverdeling_options_str  += '<option value="Beek">Beek</option>';
-            onderverdeling_options_str  += '<option value="Berm">Berm</option>';
-            onderverdeling_options_str  += '<option value="Bloemrijk gras">Bloemrijk gras</option>';
-            onderverdeling_options_str  += '<option value="Blokhaag">Blokhaag</option>';
-            onderverdeling_options_str  += '<option value="Bodembedekkers">Bodembedekkers</option>';
-            onderverdeling_options_str  += '<option value="Bosplantsoen">Bosplantsoen</option>';
-            onderverdeling_options_str  += '<option value="Fijne sierheester">Fijne sierheester</option>';
-            onderverdeling_options_str  += '<option value="Gazon">Gazon</option>';
-            onderverdeling_options_str  += '<option value="Greppel">Greppel</option>';
-            onderverdeling_options_str  += '<option value="Hondenuitlaatplaats">Hondenuitlaatplaats</option>';
-            onderverdeling_options_str  += '<option value="Natuurvriendelijke oever">Natuurvriendelijke oever</option>';
-            onderverdeling_options_str  += '<option value="Schoolplein">Schoolplein</option>';
-            onderverdeling_options_str  += '<option value="Sloot">Sloot</option>';
-            onderverdeling_options_str  += '<option value="Sporthal">Sporthal</option>';
-            onderverdeling_options_str  += '<option value="Struikrozen">Struikrozen</option>';
-            onderverdeling_options_str  += '<option value="Vijver">Vijver</option>';
-            onderverdeling_options_str  += '<option value="Waterloop">Waterloop</option>';
-            sel_onderverdeling.innerHTML = onderverdeling_options_str;
-            div_onderverdeling.appendChild(sel_onderverdeling);
-            var lab_onderverdeling = document.createElement('div');
-            lab_onderverdeling.innerHTML = 'onderverdeling';
-            lab_onderverdeling.className = 'filterlabel';
-            div_onderverdeling.appendChild(lab_onderverdeling);
-            var reset_onderverdeling = document.createElement('div');
-            reset_onderverdeling.innerHTML = 'clear filter';
-            reset_onderverdeling.className = 'filterlabel';
-            reset_onderverdeling.onclick = function() {
-                var options = document.getElementById("sel_onderverdeling").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_onderverdeling.appendChild(reset_onderverdeling);
         </script>        
     </body>
 </html>
