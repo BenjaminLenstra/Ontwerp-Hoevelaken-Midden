@@ -66,7 +66,7 @@
         }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[52.16601766557081,5.429756784456609],[52.17830121098438,5.511997366040584]]);
+        }).fitBounds([[52.17015633581262,5.453295679979577],[52.173224562777456,5.471945312667036]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -870,6 +870,9 @@
                     <tr>\
                         <td class="visible-with-data" id="beeld" colspan="2"><strong>beeld</strong><br />' + (feature.properties['beeld'] !== null ? autolinker.link(String(feature.properties['beeld']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['field_9'] !== null ? autolinker.link(String(feature.properties['field_9']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
 			layer.on('popupopen', function(e) {
@@ -1048,7 +1051,10 @@
                         <td class="visible-with-data" id="Disclaimer" colspan="2"><strong>Disclaimer</strong><br />' + (feature.properties['Disclaimer'] !== null ? autolinker.link(String(feature.properties['Disclaimer']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td class="visible-with-data" id="Data" colspan="2"><strong>Data</strong><br />' + (feature.properties['Data'] !== null ? autolinker.link(String(feature.properties['Data']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Rapport" colspan="2"><strong>Rapport</strong><br />' + (feature.properties['Rapport'] !== null ? '<img src="images/' + String(feature.properties['Rapport']).replace(/[\\/:]/g, '_').trim().replace(/'/g, '\'').replace(/"/g, '&quot;') + '">' : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Overig" colspan="2"><strong>Overig</strong><br />' + (feature.properties['Overig'] !== null ? autolinker.link(String(feature.properties['Overig']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -1129,7 +1135,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"maatregel": "str","gebruiksfunctie": "str","thema": "str"};
+        var Filters = {"gebruiksfunctie": "str","maatregel": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -1221,44 +1227,6 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
-            var div_maatregel = document.createElement('div');
-            div_maatregel.id = "div_maatregel";
-            div_maatregel.className= "filterselect";
-            document.getElementById("menu").appendChild(div_maatregel);
-            sel_maatregel = document.createElement('select');
-            sel_maatregel.multiple = true;
-            sel_maatregel.size = 9;
-            sel_maatregel.id = "sel_maatregel";
-            var maatregel_options_str = "<option value='' unselected></option>";
-            sel_maatregel.onchange = function(){filterFunc()};
-            maatregel_options_str  += '<option value="NULL">NULL</option>';
-            maatregel_options_str  += '<option value="Aanleg fietspad">Aanleg fietspad</option>';
-            maatregel_options_str  += '<option value="Fietsstraat in asfalt">Fietsstraat in asfalt</option>';
-            maatregel_options_str  += '<option value="Fietsstraat in asfalt; rabatstrook in klinkers">Fietsstraat in asfalt; rabatstrook in klinkers</option>';
-            maatregel_options_str  += '<option value="Fietsstraat in klinkers">Fietsstraat in klinkers</option>';
-            maatregel_options_str  += '<option value="Instellen schoolzone">Instellen schoolzone</option>';
-            maatregel_options_str  += '<option value="Trottoir verwijderen">Trottoir verwijderen</option>';
-            maatregel_options_str  += '<option value="Vervangen verharding">Vervangen verharding</option>';
-            maatregel_options_str  += '<option value="Verwijderen parkeerstrook">Verwijderen parkeerstrook</option>';
-            sel_maatregel.innerHTML = maatregel_options_str;
-            div_maatregel.appendChild(sel_maatregel);
-            var lab_maatregel = document.createElement('div');
-            lab_maatregel.innerHTML = 'maatregel';
-            lab_maatregel.className = 'filterlabel';
-            div_maatregel.appendChild(lab_maatregel);
-            var reset_maatregel = document.createElement('div');
-            reset_maatregel.innerHTML = 'clear filter';
-            reset_maatregel.className = 'filterlabel';
-            reset_maatregel.onclick = function() {
-                var options = document.getElementById("sel_maatregel").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_maatregel.appendChild(reset_maatregel);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
             var div_gebruiksfunctie = document.createElement('div');
             div_gebruiksfunctie.id = "div_gebruiksfunctie";
             div_gebruiksfunctie.className= "filterselect";
@@ -1300,36 +1268,41 @@
             div_gebruiksfunctie.appendChild(reset_gebruiksfunctie);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
-            var div_thema = document.createElement('div');
-            div_thema.id = "div_thema";
-            div_thema.className= "filterselect";
-            document.getElementById("menu").appendChild(div_thema);
-            sel_thema = document.createElement('select');
-            sel_thema.multiple = true;
-            sel_thema.size = 3;
-            sel_thema.id = "sel_thema";
-            var thema_options_str = "<option value='' unselected></option>";
-            sel_thema.onchange = function(){filterFunc()};
-            thema_options_str  += '<option value="Biodiversiteit">Biodiversiteit</option>';
-            thema_options_str  += '<option value="Verkeer">Verkeer</option>';
-            thema_options_str  += '<option value="Water">Water</option>';
-            sel_thema.innerHTML = thema_options_str;
-            div_thema.appendChild(sel_thema);
-            var lab_thema = document.createElement('div');
-            lab_thema.innerHTML = 'thema';
-            lab_thema.className = 'filterlabel';
-            div_thema.appendChild(lab_thema);
-            var reset_thema = document.createElement('div');
-            reset_thema.innerHTML = 'clear filter';
-            reset_thema.className = 'filterlabel';
-            reset_thema.onclick = function() {
-                var options = document.getElementById("sel_thema").options;
+            var div_maatregel = document.createElement('div');
+            div_maatregel.id = "div_maatregel";
+            div_maatregel.className= "filterselect";
+            document.getElementById("menu").appendChild(div_maatregel);
+            sel_maatregel = document.createElement('select');
+            sel_maatregel.multiple = true;
+            sel_maatregel.size = 8;
+            sel_maatregel.id = "sel_maatregel";
+            var maatregel_options_str = "<option value='' unselected></option>";
+            sel_maatregel.onchange = function(){filterFunc()};
+            maatregel_options_str  += '<option value="NULL">NULL</option>';
+            maatregel_options_str  += '<option value="Aanleg fietspad">Aanleg fietspad</option>';
+            maatregel_options_str  += '<option value="Fietsstraat in asfalt">Fietsstraat in asfalt</option>';
+            maatregel_options_str  += '<option value="Fietsstraat in asfalt; rabatstrook in klinkers">Fietsstraat in asfalt; rabatstrook in klinkers</option>';
+            maatregel_options_str  += '<option value="Instellen schoolzone">Instellen schoolzone</option>';
+            maatregel_options_str  += '<option value="Trottoir verwijderen">Trottoir verwijderen</option>';
+            maatregel_options_str  += '<option value="Vervangen verharding">Vervangen verharding</option>';
+            maatregel_options_str  += '<option value="Verwijderen parkeerstrook">Verwijderen parkeerstrook</option>';
+            sel_maatregel.innerHTML = maatregel_options_str;
+            div_maatregel.appendChild(sel_maatregel);
+            var lab_maatregel = document.createElement('div');
+            lab_maatregel.innerHTML = 'maatregel';
+            lab_maatregel.className = 'filterlabel';
+            div_maatregel.appendChild(lab_maatregel);
+            var reset_maatregel = document.createElement('div');
+            reset_maatregel.innerHTML = 'clear filter';
+            reset_maatregel.className = 'filterlabel';
+            reset_maatregel.onclick = function() {
+                var options = document.getElementById("sel_maatregel").options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
                 }
                 filterFunc();
             };
-            div_thema.appendChild(reset_thema);
+            div_maatregel.appendChild(reset_maatregel);
         </script>        
     </body>
 </html>
