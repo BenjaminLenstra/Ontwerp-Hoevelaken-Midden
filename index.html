@@ -23,7 +23,18 @@
         <title>Ontwerp Reconstructie Hoevelaken Midden</title>
     </head>
     <body>
-        <div id="map">
+	<!-- Download-balk boven de kaart -->
+	<div id="download-bar"
+     style="padding:12px; background:#f6f8fa; border-bottom:1px solid #ddd; text-align:center; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; position:relative; z-index:1000;">
+  📄 
+  <a href="docs/Ondersteunend_Rapport.pdf"
+     download
+     target="_blank"
+     style="color:#0b57d0; text-decoration:none; font-weight:600;">
+     Download Ondersteunend Rapport (PDF)
+  </a>
+</div>
+	<div id="map">
         </div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
@@ -133,7 +144,46 @@
             return this._div;
         };
         title.update = function () {
-            this._div.innerHTML = '<h2>Ontwerp Reconstructie Hoevelaken Midden</h2>';
+            this._div.innerHTML = '<h2>Ontwerp Reconstructie Hoevelaken 
+
+script>
+  // ====== Download-knop als Leaflet control (rechtsboven) ======
+  (function () {
+    // Custom control
+    var DownloadControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd: function (map) {
+        var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        container.style.background = '#fff';
+        container.style.borderRadius = '4px';
+        container.style.boxShadow = '0 1px 4px rgba(0,0,0,0.2)';
+        container.style.overflow = 'hidden';
+
+        var link = L.DomUtil.create('a', '', container);
+        link.href = 'docs/Ondersteunend_Rapport.pdf';
+        link.target = '_blank';
+        link.download = '';
+        link.innerHTML = 'PDF';
+        link.title = 'Download Ondersteunend Rapport';
+        link.style.display = 'inline-block';
+        link.style.padding = '6px 10px';
+        link.style.textDecoration = 'none';
+        link.style.color = '#0b57d0';
+        link.style.fontWeight = '600';
+
+        // Voorkom dat de kaart gaat pannen tijdens klikken op de knop
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.on(container, 'mousewheel', L.DomEvent.stop);
+        return container;
+      }
+    });
+
+    // Control toevoegen aan de kaart
+    map.addControl(new DownloadControl());
+  })();
+</script>
+``
+Midden</h2>';
         };
         title.addTo(map);
         var abstract = new L.Control({'position':'topright'});
