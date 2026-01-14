@@ -42,6 +42,7 @@
         <script src="js/tailDT.js"></script>
 <script src="js/nouislider.min.js"></script>
 <script src="js/wNumb.js"></script>
+        <script src="js/external-link-button.js"></script>
         <script src="data/Wegen_2.js"></script>
         <script src="data/Gebruiksfunctie_3.js"></script>
         <script src="data/Ontwerp_4.js"></script>
@@ -66,7 +67,7 @@
         }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[52.166113922720754,5.45498514367725],[52.17754466918642,5.47496997165456]]);
+        }).fitBounds([[52.16083636406383,5.444985727107062],[52.172265430199296,5.464965633636802]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -159,7 +160,7 @@
             abstract.show = function () {
                 this._div.classList.remove("abstract");
                 this._div.classList.add("abstractUncollapsed");
-                this._div.innerHTML = 'Wat leuk dat je de weg hebt gevonden naar mijn stageproduct! Zie voor de gebruiksaanwijzing het i-icoontje linksbovenin de kaart, op de grens van de Westerdorpsstraat & Oosterdorpsstraat. Het aan- en uitzetten van de verschillende kaartlagen kan via de knop onder deze tekst. Via de groene knop kun je het ondersteunende verslag downloaden.<br /><br />Deze kaart bekijk je het beste op een computer. In de gebruiksaanwijzing zal in een volgende update een link komen te staan naar een mobiele versie. In verband met de leesbaarheid bevat deze geen filters.';
+                this._div.innerHTML = 'Leuk dat je de weg hebt gevonden naar mijn stageproduct! Zie voor de gebruiksaanwijzing (en het bijbehorende verslag) het i-icoontje linksbovenin de kaart. Het aan- en uitzetten van de verschillende kaartlagen kan via de knop onder deze tekst. <br /><br />Deze kaart bekijk je het beste op een computer. In de gebruiksaanwijzing zal een link komen te staan naar een mobiele versie zonder filters.';
         };
         abstract.addTo(map);
         var zoomControl = L.control.zoom({
@@ -1030,9 +1031,6 @@
             });
             var popupContent = '<table>\
                     <tr>\
-                        <td class="visible-with-data" id="Mobiele versie" colspan="2"><strong>Mobiele versie</strong><br />' + (feature.properties['Mobiele versie'] !== null ? autolinker.link(String(feature.properties['Mobiele versie']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
                         <td class="visible-with-data" id="Titel" colspan="2"><strong>Titel</strong><br />' + (feature.properties['Titel'] !== null ? autolinker.link(String(feature.properties['Titel']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
@@ -1049,6 +1047,9 @@
                     </tr>\
                     <tr>\
                         <td class="visible-with-data" id="Disclaimer" colspan="2"><strong>Disclaimer</strong><br />' + (feature.properties['Disclaimer'] !== null ? autolinker.link(String(feature.properties['Disclaimer']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Rapport" colspan="2"><strong>Rapport</strong><br />' + (feature.properties['Rapport'] !== null ? autolinker.link(String(feature.properties['Rapport']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td class="visible-with-data" id="Overig" colspan="2"><strong>Overig</strong><br />' + (feature.properties['Overig'] !== null ? autolinker.link(String(feature.properties['Overig']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
@@ -1179,6 +1180,13 @@
             collapsed: true,
         });
         lay.addTo(map);
+        
+        // Add external link button below the layer control
+        var externalLinkButton = L.control.externalLinkButton({
+            position: 'topright'
+        });
+        externalLinkButton.addTo(map);
+        
         setBounds();
         var mapDiv = document.getElementById('map');
         var row = document.createElement('div');
@@ -1199,7 +1207,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Thema": "str","Maatregel": "str","Gebruiksfunctie": "str"};
+        var Filters = {"Maatregel": "str","Thema": "str","Gebruiksfunctie": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -1291,38 +1299,6 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
-            var div_Thema = document.createElement('div');
-            div_Thema.id = "div_Thema";
-            div_Thema.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Thema);
-            sel_Thema = document.createElement('select');
-            sel_Thema.multiple = true;
-            sel_Thema.size = 3;
-            sel_Thema.id = "sel_Thema";
-            var Thema_options_str = "<option value='' unselected></option>";
-            sel_Thema.onchange = function(){filterFunc()};
-            Thema_options_str  += '<option value="Biodiversiteit">Biodiversiteit</option>';
-            Thema_options_str  += '<option value="Verkeer">Verkeer</option>';
-            Thema_options_str  += '<option value="Water">Water</option>';
-            sel_Thema.innerHTML = Thema_options_str;
-            div_Thema.appendChild(sel_Thema);
-            var lab_Thema = document.createElement('div');
-            lab_Thema.innerHTML = 'Thema';
-            lab_Thema.className = 'filterlabel';
-            div_Thema.appendChild(lab_Thema);
-            var reset_Thema = document.createElement('div');
-            reset_Thema.innerHTML = 'clear filter';
-            reset_Thema.className = 'filterlabel';
-            reset_Thema.onclick = function() {
-                var options = document.getElementById("sel_Thema").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Thema.appendChild(reset_Thema);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
             var div_Maatregel = document.createElement('div');
             div_Maatregel.id = "div_Maatregel";
             div_Maatregel.className= "filterselect";
@@ -1361,6 +1337,38 @@
             div_Maatregel.appendChild(reset_Maatregel);
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
+            var div_Thema = document.createElement('div');
+            div_Thema.id = "div_Thema";
+            div_Thema.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Thema);
+            sel_Thema = document.createElement('select');
+            sel_Thema.multiple = true;
+            sel_Thema.size = 3;
+            sel_Thema.id = "sel_Thema";
+            var Thema_options_str = "<option value='' unselected></option>";
+            sel_Thema.onchange = function(){filterFunc()};
+            Thema_options_str  += '<option value="Biodiversiteit">Biodiversiteit</option>';
+            Thema_options_str  += '<option value="Verkeer">Verkeer</option>';
+            Thema_options_str  += '<option value="Water">Water</option>';
+            sel_Thema.innerHTML = Thema_options_str;
+            div_Thema.appendChild(sel_Thema);
+            var lab_Thema = document.createElement('div');
+            lab_Thema.innerHTML = 'Thema';
+            lab_Thema.className = 'filterlabel';
+            div_Thema.appendChild(lab_Thema);
+            var reset_Thema = document.createElement('div');
+            reset_Thema.innerHTML = 'clear filter';
+            reset_Thema.className = 'filterlabel';
+            reset_Thema.onclick = function() {
+                var options = document.getElementById("sel_Thema").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Thema.appendChild(reset_Thema);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
             var div_Gebruiksfunctie = document.createElement('div');
             div_Gebruiksfunctie.id = "div_Gebruiksfunctie";
             div_Gebruiksfunctie.className= "filterselect";
@@ -1396,6 +1404,14 @@
                 var options = document.getElementById("sel_Gebruiksfunctie").options;
                 for (var i=0; i < options.length; i++) {
                     options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Gebruiksfunctie.appendChild(reset_Gebruiksfunctie);
+        </script>        
+    </body>
+</html>
+ions[i].selected = false;
                 }
                 filterFunc();
             };
