@@ -42,6 +42,7 @@
         <script src="js/tailDT.js"></script>
 <script src="js/nouislider.min.js"></script>
 <script src="js/wNumb.js"></script>
+        <script src="js/external-link-button.js"></script>
         <script src="data/Wegen_2.js"></script>
         <script src="data/Gebruiksfunctie_3.js"></script>
         <script src="data/Ontwerp_4.js"></script>
@@ -66,7 +67,7 @@
         }
         var map = L.map('map', {
             zoomControl:false, maxZoom:28, minZoom:1
-        }).fitBounds([[52.16718002941547,5.4407078473303585],[52.17754038801212,5.503653503048891]]);
+        }).fitBounds([[52.16083636406383,5.444985727107062],[52.172265430199296,5.464965633636802]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -159,7 +160,7 @@
             abstract.show = function () {
                 this._div.classList.remove("abstract");
                 this._div.classList.add("abstractUncollapsed");
-                this._div.innerHTML = 'Wat leuk dat je de weg hebt gevonden naar mijn stageproduct! Zie voor de gebruiksaanwijzing het i-icoontje linksbovenin de kaart, op de grens van de Westerdorpsstraat & Oosterdorpsstraat. Het aan- en uitzetten van de verschillende kaartlagen kan via de knop met de drie \'vierkantjes\' onder deze tekst. Via de groene knop kun je het ondersteunende verslag bekijken en downloaden!<br /><br />Voor de beste gebruikerservaring bekijk je deze kaart op een desktop. Weergave van dit eindproduct op je mobiele telefoon werkt ook, al kunnen de filters niet altijd even goed zichtbaar zijn.';
+                this._div.innerHTML = 'Leuk dat je de weg hebt gevonden naar mijn stageproduct! Zie voor de gebruiksaanwijzing (en het bijbehorende verslag) het i-icoontje linksbovenin de kaart. Het aan- en uitzetten van de verschillende kaartlagen kan via de knop onder deze tekst. <br /><br />Deze kaart bekijk je het beste op een computer. In de gebruiksaanwijzing zal een link komen te staan naar een mobiele versie zonder filters.';
         };
         abstract.addTo(map);
         var zoomControl = L.control.zoom({
@@ -1048,10 +1049,10 @@
                         <td class="visible-with-data" id="Disclaimer" colspan="2"><strong>Disclaimer</strong><br />' + (feature.properties['Disclaimer'] !== null ? autolinker.link(String(feature.properties['Disclaimer']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td class="visible-with-data" id="Overig" colspan="2"><strong>Overig</strong><br />' + (feature.properties['Overig'] !== null ? autolinker.link(String(feature.properties['Overig']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Rapport" colspan="2"><strong>Rapport</strong><br />' + (feature.properties['Rapport'] !== null ? autolinker.link(String(feature.properties['Rapport']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['field_10'] !== null ? autolinker.link(String(feature.properties['field_10']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                        <td class="visible-with-data" id="Overig" colspan="2"><strong>Overig</strong><br />' + (feature.properties['Overig'] !== null ? autolinker.link(String(feature.properties['Overig']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             var content = removeEmptyRowsFromPopupContent(popupContent, feature);
@@ -1179,6 +1180,13 @@
             collapsed: true,
         });
         lay.addTo(map);
+        
+        // Add external link button below the layer control
+        var externalLinkButton = L.control.externalLinkButton({
+            position: 'topright'
+        });
+        externalLinkButton.addTo(map);
+        
         setBounds();
         var mapDiv = document.getElementById('map');
         var row = document.createElement('div');
@@ -1199,7 +1207,7 @@
         document.getElementById("all").appendChild(col1);
         document.getElementById("all").appendChild(col2);
         col1.appendChild(mapDiv)
-        var Filters = {"Gebruiksfunctie": "str","Maatregel": "str","Thema": "str"};
+        var Filters = {"Maatregel": "str","Thema": "str","Gebruiksfunctie": "str"};
         function filterFunc() {
           map.eachLayer(function(lyr){
           if ("options" in lyr && "dataVar" in lyr["options"]){
@@ -1291,47 +1299,6 @@
         }
             document.getElementById("menu").appendChild(
                 document.createElement("div"));
-            var div_Gebruiksfunctie = document.createElement('div');
-            div_Gebruiksfunctie.id = "div_Gebruiksfunctie";
-            div_Gebruiksfunctie.className= "filterselect";
-            document.getElementById("menu").appendChild(div_Gebruiksfunctie);
-            sel_Gebruiksfunctie = document.createElement('select');
-            sel_Gebruiksfunctie.multiple = true;
-            sel_Gebruiksfunctie.size = 10;
-            sel_Gebruiksfunctie.id = "sel_Gebruiksfunctie";
-            var Gebruiksfunctie_options_str = "<option value='' unselected></option>";
-            sel_Gebruiksfunctie.onchange = function(){filterFunc()};
-            Gebruiksfunctie_options_str  += '<option value="NULL">NULL</option>';
-            Gebruiksfunctie_options_str  += '<option value="Berm">Berm</option>';
-            Gebruiksfunctie_options_str  += '<option value="Bibliotheek ">Bibliotheek </option>';
-            Gebruiksfunctie_options_str  += '<option value="Hondenuitlaatplaats">Hondenuitlaatplaats</option>';
-            Gebruiksfunctie_options_str  += '<option value="Natuurvriendelijke oever">Natuurvriendelijke oever</option>';
-            Gebruiksfunctie_options_str  += '<option value="Schoolplein">Schoolplein</option>';
-            Gebruiksfunctie_options_str  += '<option value="Sloot">Sloot</option>';
-            Gebruiksfunctie_options_str  += '<option value="Speelplaats">Speelplaats</option>';
-            Gebruiksfunctie_options_str  += '<option value="Sporthal ">Sporthal </option>';
-            Gebruiksfunctie_options_str  += '<option value="Trapveld">Trapveld</option>';
-            Gebruiksfunctie_options_str  += '<option value="Vijver">Vijver</option>';
-            Gebruiksfunctie_options_str  += '<option value="Vrije Speelruimte">Vrije Speelruimte</option>';
-            sel_Gebruiksfunctie.innerHTML = Gebruiksfunctie_options_str;
-            div_Gebruiksfunctie.appendChild(sel_Gebruiksfunctie);
-            var lab_Gebruiksfunctie = document.createElement('div');
-            lab_Gebruiksfunctie.innerHTML = 'Gebruiksfunctie';
-            lab_Gebruiksfunctie.className = 'filterlabel';
-            div_Gebruiksfunctie.appendChild(lab_Gebruiksfunctie);
-            var reset_Gebruiksfunctie = document.createElement('div');
-            reset_Gebruiksfunctie.innerHTML = 'clear filter';
-            reset_Gebruiksfunctie.className = 'filterlabel';
-            reset_Gebruiksfunctie.onclick = function() {
-                var options = document.getElementById("sel_Gebruiksfunctie").options;
-                for (var i=0; i < options.length; i++) {
-                    options[i].selected = false;
-                }
-                filterFunc();
-            };
-            div_Gebruiksfunctie.appendChild(reset_Gebruiksfunctie);
-            document.getElementById("menu").appendChild(
-                document.createElement("div"));
             var div_Maatregel = document.createElement('div');
             div_Maatregel.id = "div_Maatregel";
             div_Maatregel.className= "filterselect";
@@ -1400,6 +1367,47 @@
                 filterFunc();
             };
             div_Thema.appendChild(reset_Thema);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Gebruiksfunctie = document.createElement('div');
+            div_Gebruiksfunctie.id = "div_Gebruiksfunctie";
+            div_Gebruiksfunctie.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Gebruiksfunctie);
+            sel_Gebruiksfunctie = document.createElement('select');
+            sel_Gebruiksfunctie.multiple = true;
+            sel_Gebruiksfunctie.size = 10;
+            sel_Gebruiksfunctie.id = "sel_Gebruiksfunctie";
+            var Gebruiksfunctie_options_str = "<option value='' unselected></option>";
+            sel_Gebruiksfunctie.onchange = function(){filterFunc()};
+            Gebruiksfunctie_options_str  += '<option value="NULL">NULL</option>';
+            Gebruiksfunctie_options_str  += '<option value="Berm">Berm</option>';
+            Gebruiksfunctie_options_str  += '<option value="Bibliotheek ">Bibliotheek </option>';
+            Gebruiksfunctie_options_str  += '<option value="Hondenuitlaatplaats">Hondenuitlaatplaats</option>';
+            Gebruiksfunctie_options_str  += '<option value="Natuurvriendelijke oever">Natuurvriendelijke oever</option>';
+            Gebruiksfunctie_options_str  += '<option value="Schoolplein">Schoolplein</option>';
+            Gebruiksfunctie_options_str  += '<option value="Sloot">Sloot</option>';
+            Gebruiksfunctie_options_str  += '<option value="Speelplaats">Speelplaats</option>';
+            Gebruiksfunctie_options_str  += '<option value="Sporthal ">Sporthal </option>';
+            Gebruiksfunctie_options_str  += '<option value="Trapveld">Trapveld</option>';
+            Gebruiksfunctie_options_str  += '<option value="Vijver">Vijver</option>';
+            Gebruiksfunctie_options_str  += '<option value="Vrije Speelruimte">Vrije Speelruimte</option>';
+            sel_Gebruiksfunctie.innerHTML = Gebruiksfunctie_options_str;
+            div_Gebruiksfunctie.appendChild(sel_Gebruiksfunctie);
+            var lab_Gebruiksfunctie = document.createElement('div');
+            lab_Gebruiksfunctie.innerHTML = 'Gebruiksfunctie';
+            lab_Gebruiksfunctie.className = 'filterlabel';
+            div_Gebruiksfunctie.appendChild(lab_Gebruiksfunctie);
+            var reset_Gebruiksfunctie = document.createElement('div');
+            reset_Gebruiksfunctie.innerHTML = 'clear filter';
+            reset_Gebruiksfunctie.className = 'filterlabel';
+            reset_Gebruiksfunctie.onclick = function() {
+                var options = document.getElementById("sel_Gebruiksfunctie").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Gebruiksfunctie.appendChild(reset_Gebruiksfunctie);
         </script>        
     </body>
 </html>
